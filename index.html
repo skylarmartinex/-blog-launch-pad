@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Launch Pad</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0f0f0f 0%, #1a1a2e 50%, #16213e 100%);
+            color: #e2e8f0;
+            font-family: 'IBM Plex Sans', -apple-system, sans-serif;
+            padding: 24px;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #60a5fa, #a78bfa, #f472b6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+        }
+
+        .header p {
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        @media (max-width: 768px) {
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 20px;
+            text-align: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .stat-label {
+            color: #64748b;
+            font-size: 0.75rem;
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.75rem;
+            font-weight: 700;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            background: rgba(0,0,0,0.3);
+            padding: 8px;
+            border-radius: 12px;
+        }
+
+        .tab-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            color: #94a3b8;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            font-family: inherit;
+        }
+
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .tab-btn.active {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+        }
+
+        /* Main Card */
+        .main-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 16px;
+            padding: 24px;
+            min-height: 500px;
+            backdrop-filter: blur(10px);
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+
+        .section-header h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .section-header p {
+            color: #64748b;
+        }
+
+        .progress-display {
+            text-align: right;
+        }
+
+        .progress-percent {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .progress-label {
+            color: #64748b;
+            font-size: 0.8rem;
+        }
+
+        /* Progress Bar */
+        .progress-bar-container {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.5s ease;
+        }
+
+        /* Task List */
+        .task-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.2s ease;
+        }
+
+        .task-item:hover {
+            transform: translateX(4px);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .task-item.done {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: rgba(16, 185, 129, 0.3);
+        }
+
+        .task-checkbox {
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .task-checkbox:checked {
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            border-color: transparent;
+        }
+
+        .task-checkbox:checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .task-text {
+            flex: 1;
+        }
+
+        .task-item.done .task-text {
+            text-decoration: line-through;
+            color: #64748b;
+        }
+
+        .task-time {
+            padding: 4px 12px;
+            background: rgba(59, 130, 246, 0.2);
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: #60a5fa;
+            font-family: 'JetBrains Mono', monospace;
+            flex-shrink: 0;
+        }
+
+        .task-day {
+            width: 60px;
+            color: #8b5cf6;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.85rem;
+            flex-shrink: 0;
+        }
+
+        /* Roadmap */
+        .roadmap-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .roadmap-item {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 2px solid rgba(255,255,255,0.05);
+        }
+
+        .roadmap-item.active {
+            background: rgba(59,130,246,0.1);
+            border-color: #3b82f6;
+        }
+
+        .phase-number {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #64748b;
+        }
+
+        .roadmap-item.active .phase-number {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .phase-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+
+        .phase-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .phase-weeks {
+            padding: 2px 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .phase-current {
+            padding: 2px 10px;
+            background: #3b82f6;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            color: white;
+            font-weight: 600;
+        }
+
+        .phase-focus {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .phase-milestone {
+            color: #e2e8f0;
+            font-size: 0.85rem;
+        }
+
+        /* Content Ideas */
+        .idea-card {
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .idea-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+            margin-bottom: 8px;
+        }
+
+        .idea-tags {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .tag-pillar {
+            background: rgba(59, 130, 246, 0.2);
+            color: #60a5fa;
+        }
+
+        .tag-keyword {
+            background: rgba(255,255,255,0.05);
+            color: #94a3b8;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .tag-priority {
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .tag-priority.high {
+            background: rgba(239, 68, 68, 0.2);
+            color: #f87171;
+        }
+
+        .tag-priority.medium {
+            background: rgba(245, 158, 11, 0.2);
+            color: #fbbf24;
+        }
+
+        .tag-priority.low {
+            background: rgba(107, 114, 128, 0.2);
+            color: #9ca3af;
+        }
+
+        /* Backlog */
+        .backlog-card {
+            padding: 20px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 16px;
+        }
+
+        .backlog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .backlog-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #e2e8f0;
+        }
+
+        .backlog-tag {
+            padding: 4px 12px;
+            background: rgba(139, 92, 246, 0.2);
+            color: #a78bfa;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .backlog-desc {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            margin-bottom: 12px;
+        }
+
+        .backlog-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .backlog-meta span {
+            font-size: 0.8rem;
+        }
+
+        .meta-impact {
+            color: #10b981;
+        }
+
+        .meta-tools {
+            color: #60a5fa;
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* SOPs */
+        .sop-card {
+            padding: 24px;
+            background: rgba(255,255,255,0.02);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.08);
+            margin-bottom: 24px;
+        }
+
+        .sop-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            color: #60a5fa;
+        }
+
+        .sop-phase {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #f59e0b;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .sop-steps {
+            padding-left: 16px;
+            border-left: 2px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+        }
+
+        .sop-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #cbd5e1;
+            font-size: 0.9rem;
+            margin-bottom: 8px;
+        }
+
+        .sop-step span {
+            color: #64748b;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 24px;
+            text-align: center;
+            color: #475569;
+            font-size: 0.8rem;
+        }
+
+        /* Reset Button */
+        .reset-btn {
+            padding: 8px 16px;
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            border-radius: 8px;
+            color: #f87171;
+            font-size: 0.8rem;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .reset-btn:hover {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        /* Hidden sections */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Pillar colors */
+        .pillar-tool { background: #1e3a5f; color: #3b82f6; }
+        .pillar-systems { background: #134e4a; color: #10b981; }
+        .pillar-growth { background: #78350f; color: #f59e0b; }
+        .pillar-case { background: #4c1d95; color: #8b5cf6; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>🚀 Blog Launch Pad</h1>
+            <p>Your 6-Month Blog Growth System • Tech × Personal Development × Entrepreneurship</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-label">Day 1 Progress</div>
+                <div class="stat-value" id="stat-day1" style="color: #3b82f6;">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Week 1 Progress</div>
+                <div class="stat-value" id="stat-week1" style="color: #10b981;">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Week 2 Progress</div>
+                <div class="stat-value" id="stat-week2" style="color: #f59e0b;">0%</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Current Phase</div>
+                <div class="stat-value" style="color: #8b5cf6;">Foundation</div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="day1">⚡ Day 1</button>
+            <button class="tab-btn" data-tab="week1">📅 Week 1</button>
+            <button class="tab-btn" data-tab="week2">📅 Week 2</button>
+            <button class="tab-btn" data-tab="roadmap">🗺️ Roadmap</button>
+            <button class="tab-btn" data-tab="ideas">💡 Content Ideas</button>
+            <button class="tab-btn" data-tab="backlog">🔧 Automations</button>
+            <button class="tab-btn" data-tab="sops">📋 SOPs</button>
+        </div>
+
+        <!-- Main Card -->
+        <div class="main-card">
+            
+            <!-- Day 1 -->
+            <div class="tab-content active" id="tab-day1">
+                <div class="section-header">
+                    <div>
+                        <h2>⚡ Day 1: Foundation Launch</h2>
+                        <p>Complete these tasks in 60-90 minutes to get started</p>
+                    </div>
+                    <div class="progress-display">
+                        <div class="progress-percent" id="progress-day1" style="color: #3b82f6;">0%</div>
+                        <div class="progress-label">Complete</div>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="bar-day1" style="width: 0%; background: linear-gradient(90deg, #3b82f6, #8b5cf6);"></div>
+                </div>
+                <div class="task-list" id="tasks-day1"></div>
+            </div>
+
+            <!-- Week 1 -->
+            <div class="tab-content" id="tab-week1">
+                <div class="section-header">
+                    <div>
+                        <h2>📅 Week 1: Foundation & Identity</h2>
+                        <p>Get the blog live with clear positioning</p>
+                    </div>
+                    <div class="progress-display">
+                        <div class="progress-percent" id="progress-week1" style="color: #10b981;">0%</div>
+                        <div class="progress-label">Complete</div>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="bar-week1" style="width: 0%; background: linear-gradient(90deg, #10b981, #34d399);"></div>
+                </div>
+                <div class="task-list" id="tasks-week1"></div>
+            </div>
+
+            <!-- Week 2 -->
+            <div class="tab-content" id="tab-week2">
+                <div class="section-header">
+                    <div>
+                        <h2>📅 Week 2: Content Engine Start</h2>
+                        <p>Build momentum with 3-4 posts + basic SEO</p>
+                    </div>
+                    <div class="progress-display">
+                        <div class="progress-percent" id="progress-week2" style="color: #f59e0b;">0%</div>
+                        <div class="progress-label">Complete</div>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" id="bar-week2" style="width: 0%; background: linear-gradient(90deg, #f59e0b, #fbbf24);"></div>
+                </div>
+                <div class="task-list" id="tasks-week2"></div>
+            </div>
+
+            <!-- Roadmap -->
+            <div class="tab-content" id="tab-roadmap">
+                <h2 style="margin-bottom: 24px;">🗺️ 6-Month Roadmap</h2>
+                <div class="roadmap-list" id="roadmap-list"></div>
+            </div>
+
+            <!-- Content Ideas -->
+            <div class="tab-content" id="tab-ideas">
+                <h2 style="margin-bottom: 24px;">💡 Content Ideas Bank</h2>
+                <div id="ideas-list"></div>
+            </div>
+
+            <!-- Backlog -->
+            <div class="tab-content" id="tab-backlog">
+                <h2 style="margin-bottom: 8px;">🔧 Future Automations Backlog</h2>
+                <p style="color: #64748b; margin-bottom: 24px;">Tasks flagged for automation when ready</p>
+                <div id="backlog-list"></div>
+            </div>
+
+            <!-- SOPs -->
+            <div class="tab-content" id="tab-sops">
+                <h2 style="margin-bottom: 24px;">📋 Standard Operating Procedures</h2>
+                <div id="sops-list"></div>
+            </div>
+
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>✨ Your progress is automatically saved in this browser</p>
+            <button class="reset-btn" onclick="resetProgress()" style="margin-top: 12px;">Reset All Progress</button>
+        </div>
+    </div>
+
+    <script>
+        // Data
+        const tasksData = {
+            day1: [
+                { id: 'd1-1', text: 'Define niche statement: "I help [audience] use [tools] to achieve [outcome]"', time: '20 min' },
+                { id: 'd1-2', text: 'Brainstorm 10-15 blog name ideas', time: '15 min' },
+                { id: 'd1-3', text: 'Check domain availability (Namecheap/Porkbun)', time: '10 min' },
+                { id: 'd1-4', text: 'Purchase your domain (.com preferred)', time: '5 min' },
+                { id: 'd1-5', text: 'Decide on tech stack: WordPress + SiteGround hosting', time: '10 min' },
+                { id: 'd1-6', text: 'Bookmark SiteGround.com for tomorrow\'s setup', time: '5 min' },
+            ],
+            week1: [
+                { id: 'w1-1', text: 'Day 1: Niche + Domain + Tech decision', day: 1 },
+                { id: 'w1-2', text: 'Day 2: Set up hosting + Install WordPress', day: 2 },
+                { id: 'w1-3', text: 'Day 3: Choose theme + Basic design config', day: 3 },
+                { id: 'w1-4', text: 'Day 4: Write About page + Core pages', day: 4 },
+                { id: 'w1-5', text: 'Day 5: Define 4 pillars + Brainstorm 20 post ideas', day: 5 },
+                { id: 'w1-6', text: 'Day 6: Outline first 3 posts', day: 6 },
+                { id: 'w1-7', text: 'Day 7: Write + Publish Post #1', day: 7 },
+            ],
+            week2: [
+                { id: 'w2-1', text: 'Day 8: Install Yoast/RankMath + Google Search Console', day: 8 },
+                { id: 'w2-2', text: 'Day 9: Write + Publish Post #2 (Tool Deep Dive)', day: 9 },
+                { id: 'w2-3', text: 'Day 10: Keyword research - find 10 low-comp keywords', day: 10 },
+                { id: 'w2-4', text: 'Day 11: Write + Publish Post #3 (Systems/Workflow)', day: 11 },
+                { id: 'w2-5', text: 'Day 12: Set up Google Analytics + Dashboard', day: 12 },
+                { id: 'w2-6', text: 'Day 13: Write + Publish Post #4 (Personal Growth)', day: 13 },
+                { id: 'w2-7', text: 'Day 14: Weekly review + Plan Week 3 + Batch 5 outlines', day: 14 },
+            ]
+        };
+
+        const roadmapData = [
+            { phase: 1, name: 'Foundation', weeks: '1-4', focus: 'Brand, positioning, tech setup, first 10 posts', milestone: 'Blog live + 10 articles', active: true },
+            { phase: 2, name: 'Consistent Publishing', weeks: '5-10', focus: '2-3 posts/week, basic SEO, content calendar', milestone: '30 total posts, traffic baseline', active: false },
+            { phase: 3, name: 'Growth', weeks: '11-16', focus: 'Email list, lead magnet, social distribution', milestone: '500 email subscribers', active: false },
+            { phase: 4, name: 'Monetization', weeks: '17-20', focus: 'Affiliate content, first digital product', milestone: 'First $500 revenue', active: false },
+            { phase: 5, name: 'Automation & Scale', weeks: '21-26', focus: 'Delegate, systematize, AI agents', milestone: '80% publishing automated', active: false },
+        ];
+
+        const ideasData = [
+            { title: 'How I Use Claude to Write Blog Posts 2x Faster', pillar: 'Tool Deep Dive', keyword: 'claude ai writing', priority: 'high' },
+            { title: 'My Morning Routine System (Built with Notion)', pillar: 'Systems & Workflows', keyword: 'notion morning routine', priority: 'high' },
+            { title: 'The Solo Creator Tech Stack for 2025', pillar: 'Tool Deep Dive', keyword: 'creator tech stack', priority: 'medium' },
+            { title: '5 Automations Every Solopreneur Needs', pillar: 'Systems & Workflows', keyword: 'solopreneur automations', priority: 'high' },
+            { title: 'Why I Quit Productivity Apps (And What I Use Instead)', pillar: 'Personal Growth', keyword: 'productivity apps alternative', priority: 'medium' },
+            { title: 'Building My First AI Agent: A Case Study', pillar: 'Case Study', keyword: 'build ai agent tutorial', priority: 'medium' },
+            { title: 'The 2-Hour Work Morning: Deep Work for Creators', pillar: 'Personal Growth', keyword: 'deep work morning routine', priority: 'low' },
+            { title: 'Zapier vs Make vs n8n: Which Automation Tool Wins?', pillar: 'Tool Deep Dive', keyword: 'zapier vs make comparison', priority: 'high' },
+        ];
+
+        const backlogData = [
+            { title: 'Auto-generate post outlines', description: 'AI creates draft outline from keyword + pillar', impact: 'Saves 20 min/post', tools: 'Claude/GPT + Notion AI' },
+            { title: 'Social post auto-creation', description: 'Blog publish → auto-generate Twitter/LinkedIn post', impact: 'Removes manual repurposing', tools: 'Zapier/Make + Buffer' },
+            { title: 'Keyword research pipeline', description: 'Weekly auto-pull of trending keywords in niche', impact: 'Always have fresh ideas', tools: 'Ahrefs API + Google Sheets' },
+            { title: 'Email newsletter automation', description: 'New post → auto-send to subscribers', impact: 'Hands-free list engagement', tools: 'ConvertKit + Zapier' },
+            { title: 'Content repurposing queue', description: 'Flag high-performing posts for repurposing', impact: 'Extract more value from winners', tools: 'GA + Notion + Zapier' },
+            { title: 'AI first-draft writer', description: 'Keyword + outline → 80% complete draft', impact: 'Cuts writing time in half', tools: 'Claude API + custom script' },
+            { title: 'Featured image auto-generation', description: 'Auto-create images from post title', impact: 'Remove design bottleneck', tools: 'Bannerbear + Zapier' },
+        ];
+
+        const sopsData = [
+            {
+                title: 'Blog Post Creation Process',
+                sections: [
+                    { phase: 'Pre-Writing (10 min)', steps: ['Choose topic from Content Ideas', 'Quick keyword check (Google "related searches")', 'Define: Target keyword, search intent, ideal reader'] },
+                    { phase: 'Writing (30-45 min)', steps: ['Write headline (aim for curiosity + clarity)', 'Write intro hook (start with problem or question)', 'Write 3-5 subheadings as outline', 'Fill sections (800-1500 words)', 'Add 1-2 internal + 1-2 external links', 'Write meta description (150-160 chars)'] },
+                    { phase: 'Publishing (10 min)', steps: ['Add featured image (Unsplash/Canva)', 'Set categories + tags', 'Run SEO plugin checklist', 'Publish or schedule', 'Add to Published Posts tracker'] },
+                    { phase: 'Post-Publish (5 min)', steps: ['Share to 1 social platform', 'Add to Repurpose Queue if high-value'] },
+                ]
+            },
+            {
+                title: 'Weekly Content Planning',
+                sections: [
+                    { phase: 'Review (10 min)', steps: ['Check last week: posts published, analytics standouts', 'Note what worked and what felt hard'] },
+                    { phase: 'Plan (15 min)', steps: ['Pick 2-3 topics from Content Ideas', 'Assign each to a day', 'Note target keyword + angle for each'] },
+                    { phase: 'Prep (5 min)', steps: ['Block time on calendar for writing sessions', 'Set 1 stretch goal for the week'] },
+                ]
+            },
+        ];
+
+        // Load saved progress
+        let completedTasks = JSON.parse(localStorage.getItem('blogLaunchPad_completed') || '{}');
+
+        // Render functions
+        function renderTasks(category, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = tasksData[category].map(task => {
+                const isDone = completedTasks[task.id] || false;
+                return `
+                    <div class="task-item ${isDone ? 'done' : ''}" onclick="toggleTask('${task.id}')">
+                        <input type="checkbox" class="task-checkbox" ${isDone ? 'checked' : ''} readonly>
+                        ${task.day ? `<span class="task-day">Day ${task.day}</span>` : ''}
+                        <span class="task-text">${task.text}</span>
+                        ${task.time ? `<span class="task-time">${task.time}</span>` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function renderRoadmap() {
+            const container = document.getElementById('roadmap-list');
+            container.innerHTML = roadmapData.map(phase => `
+                <div class="roadmap-item ${phase.active ? 'active' : ''}">
+                    <div class="phase-number">${phase.phase}</div>
+                    <div>
+                        <div class="phase-header">
+                            <span class="phase-name" style="color: ${phase.active ? '#3b82f6' : '#e2e8f0'}">${phase.name}</span>
+                            <span class="phase-weeks">Weeks ${phase.weeks}</span>
+                            ${phase.active ? '<span class="phase-current">CURRENT</span>' : ''}
+                        </div>
+                        <p class="phase-focus">${phase.focus}</p>
+                        <p class="phase-milestone">🎯 <strong>Milestone:</strong> ${phase.milestone}</p>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderIdeas() {
+            const container = document.getElementById('ideas-list');
+            const pillarClasses = {
+                'Tool Deep Dive': 'pillar-tool',
+                'Systems & Workflows': 'pillar-systems',
+                'Personal Growth': 'pillar-growth',
+                'Case Study': 'pillar-case'
+            };
+            container.innerHTML = ideasData.map(idea => `
+                <div class="idea-card">
+                    <div>
+                        <div class="idea-title">${idea.title}</div>
+                        <div class="idea-tags">
+                            <span class="tag ${pillarClasses[idea.pillar]}">${idea.pillar}</span>
+                            <span class="tag tag-keyword">🔑 ${idea.keyword}</span>
+                        </div>
+                    </div>
+                    <span class="tag-priority ${idea.priority}">${idea.priority}</span>
+                </div>
+            `).join('');
+        }
+
+        function renderBacklog() {
+            const container = document.getElementById('backlog-list');
+            container.innerHTML = backlogData.map(item => `
+                <div class="backlog-card">
+                    <div class="backlog-header">
+                        <span class="backlog-title">${item.title}</span>
+                        <span class="backlog-tag">[AUTOMATE]</span>
+                    </div>
+                    <p class="backlog-desc">${item.description}</p>
+                    <div class="backlog-meta">
+                        <span class="meta-impact">💪 ${item.impact}</span>
+                        <span class="meta-tools">🛠️ ${item.tools}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function renderSOPs() {
+            const container = document.getElementById('sops-list');
+            container.innerHTML = sopsData.map(sop => `
+                <div class="sop-card">
+                    <div class="sop-title">${sop.title}</div>
+                    ${sop.sections.map(section => `
+                        <div class="sop-phase">${section.phase}</div>
+                        <div class="sop-steps">
+                            ${section.steps.map(step => `
+                                <div class="sop-step"><span>•</span> ${step}</div>
+                            `).join('')}
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+
+        // Toggle task
+        function toggleTask(taskId) {
+            completedTasks[taskId] = !completedTasks[taskId];
+            localStorage.setItem('blogLaunchPad_completed', JSON.stringify(completedTasks));
+            renderAll();
+            updateProgress();
+        }
+
+        // Update progress
+        function updateProgress() {
+            ['day1', 'week1', 'week2'].forEach(category => {
+                const tasks = tasksData[category];
+                const done = tasks.filter(t => completedTasks[t.id]).length;
+                const percent = Math.round((done / tasks.length) * 100);
+                
+                document.getElementById(`progress-${category}`).textContent = percent + '%';
+                document.getElementById(`bar-${category}`).style.width = percent + '%';
+                document.getElementById(`stat-${category}`).textContent = percent + '%';
+            });
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+            });
+        });
+
+        // Reset progress
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset all progress? This cannot be undone.')) {
+                completedTasks = {};
+                localStorage.removeItem('blogLaunchPad_completed');
+                renderAll();
+                updateProgress();
+            }
+        }
+
+        // Render all
+        function renderAll() {
+            renderTasks('day1', 'tasks-day1');
+            renderTasks('week1', 'tasks-week1');
+            renderTasks('week2', 'tasks-week2');
+            renderRoadmap();
+            renderIdeas();
+            renderBacklog();
+            renderSOPs();
+        }
+
+        // Initialize
+        renderAll();
+        updateProgress();
+    </script>
+</body>
+</html>
