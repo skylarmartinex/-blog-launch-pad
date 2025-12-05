@@ -4,6 +4,7 @@ export interface Task {
   time?: string;
   day?: number;
   hint?: string;
+  guideUrl?: string;
 }
 
 export interface RoadmapPhase {
@@ -41,9 +42,9 @@ export interface SOP {
 
 export const tasksData: Record<string, Task[]> = {
   day1: [
-    { id: 'd1-1', text: 'Define niche statement: "I help [audience] use [tools] to achieve [outcome]"', time: '20 min', hint: 'Example: "I help solo creators use AI tools and systems to work smarter and grow faster"' },
-    { id: 'd1-2', text: 'Brainstorm 10-15 blog name ideas', time: '15 min', hint: 'Write down all your ideas, even crazy ones.' },
-    { id: 'd1-3', text: 'Check domain availability (Namecheap/Porkbun)', time: '10 min', hint: 'Note which names are available as .com domains' },
+    { id: 'd1-1', text: 'Define niche statement: "I help [audience] use [tools] to achieve [outcome]"', time: '20 min', hint: 'Example: "I help solo creators use AI tools and systems to work smarter and grow faster"', guideUrl: '/guides/define-your-niche' },
+    { id: 'd1-2', text: 'Brainstorm 10-15 blog name ideas', time: '15 min', hint: 'Write down all your ideas, even crazy ones.', guideUrl: '/guides/brainstorm-blog-names' },
+    { id: 'd1-3', text: 'Check domain availability (Namecheap/Porkbun)', time: '10 min', hint: 'Note which names are available as .com domains', guideUrl: '/guides/check-domain-availability' },
     { id: 'd1-4', text: 'Purchase your domain (.com preferred)', time: '5 min', hint: 'Write down the domain you purchased' },
     { id: 'd1-5', text: 'Decide on tech stack: WordPress + SiteGround hosting', time: '10 min', hint: 'Note your final decision and why' },
     { id: 'd1-6', text: 'Bookmark SiteGround.com for tomorrow', time: '5 min', hint: 'Done! Ready for Day 2' },
