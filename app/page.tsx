@@ -85,6 +85,14 @@ export default function Home() {
       task = category.find(t => t.id === taskId) || null;
       if (task) break;
     }
+
+    // If task has a guide URL, navigate directly to it
+    if (task?.guideUrl) {
+      window.location.href = task.guideUrl;
+      return;
+    }
+
+    // Otherwise open the modal
     setCurrentTask(task);
     setIsModalOpen(true);
   };
