@@ -248,20 +248,22 @@ export default function GuideTemplate({
               </div>
 
               {/* Exercise Section */}
-              {section.exercise && isUnlocked && (
+              {section.exercise && isUnlocked && (() => {
+                const exercise = section.exercise!; // Narrowing for TypeScript
+                return (
                 <div className="mt-6 p-5 bg-blue-500/10 border border-blue-500/20 rounded-xl">
                   <div className="flex items-start gap-3 mb-4">
                     <span className="text-2xl">✍️</span>
                     <div className="flex-1">
                       <h3 className="text-lg font-semibold text-blue-300 mb-2 mt-0">Exercise</h3>
-                      <p className="text-slate-300 text-sm mb-4">{section.exercise.prompt}</p>
+                      <p className="text-slate-300 text-sm mb-4">{exercise.prompt}</p>
                     </div>
                   </div>
 
                   {/* Multiple structured fields */}
-                  {section.exercise.fields ? (
+                  {exercise.fields ? (
                     <div className="space-y-4">
-                      {section.exercise.fields.map((field, fieldIndex) => (
+                      {exercise.fields.map((field, fieldIndex) => (
                         <div key={field.id}>
                           {field.label && (
                             <label className="block text-sm font-medium text-slate-300 mb-2">
@@ -295,34 +297,35 @@ export default function GuideTemplate({
                     </div>
                   ) : (
                     /* Legacy single input */
-                    section.exercise.multiline ? (
+                    exercise.multiline ? (
                       <textarea
-                        value={exerciseResponses[section.exercise.id] || ''}
-                        onChange={(e) => handleExerciseChange(section.exercise.id, e.target.value)}
-                        placeholder={section.exercise.placeholder || 'Type your response here...'}
+                        value={exerciseResponses[exercise.id] || ''}
+                        onChange={(e) => handleExerciseChange(exercise.id, e.target.value)}
+                        placeholder={exercise.placeholder || 'Type your response here...'}
                         className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20 min-h-[120px] resize-y"
                         rows={5}
                       />
                     ) : (
                       <input
                         type="text"
-                        value={exerciseResponses[section.exercise.id] || ''}
-                        onChange={(e) => handleExerciseChange(section.exercise.id, e.target.value)}
-                        placeholder={section.exercise.placeholder || 'Type your response here...'}
+                        value={exerciseResponses[exercise.id] || ''}
+                        onChange={(e) => handleExerciseChange(exercise.id, e.target.value)}
+                        placeholder={exercise.placeholder || 'Type your response here...'}
                         className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-slate-200 placeholder-slate-500 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
                       />
                     )
                   )}
 
                   <button
-                    onClick={() => handleExerciseSubmit(index, section.exercise!)}
+                    onClick={() => handleExerciseSubmit(index, exercise)}
                     disabled={isSaving}
                     className="mt-4 px-6 py-2 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 disabled:from-slate-600 disabled:to-slate-600 disabled:cursor-not-allowed rounded-lg text-white font-medium transition-all"
                   >
                     {isSaving ? 'Saving...' : index === sections.length - 1 ? 'Complete Guide' : 'Save & Continue'}
                   </button>
                 </div>
-              )}
+                );
+              })()}
             </section>
           );
         })}
