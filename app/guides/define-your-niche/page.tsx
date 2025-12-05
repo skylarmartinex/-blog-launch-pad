@@ -48,6 +48,74 @@ export default function DefineYourNichePage() {
           },
         },
         {
+          title: 'Identify the Sticky Problem',
+          content: [
+            'A "sticky problem" is the burning issue your audience faces daily. It keeps them up at night and they\'re actively seeking solutions.',
+            'This is NOT just a minor inconvenience - it\'s a problem they\'ll invest time and money to solve.',
+            'When you identify the right sticky problem, your content will immediately resonate because readers will think: "This person gets me!"',
+          ],
+          exercise: {
+            id: 'sticky-problem',
+            prompt: 'Choose the core problem your audience faces, then describe the moment they realize they have it.',
+            fields: [
+              {
+                id: 'sticky-problem-choice',
+                label: 'What is the main problem your audience faces?',
+                type: 'select',
+                options: [
+                  'Saving time',
+                  'Making money',
+                  'Reducing overwhelm',
+                  'Growing an audience',
+                  'Learning AI tools',
+                  'Getting organized',
+                  'Starting a business',
+                  'Other',
+                ],
+                placeholder: 'Select the primary problem...',
+              },
+              {
+                id: 'sticky-problem-description',
+                label: 'Describe the moment your audience realizes they have this problem',
+                type: 'textarea',
+                placeholder: 'Example: They\'re scrolling social media at 11pm, seeing everyone else crushing it, while they haven\'t published in weeks...',
+              },
+            ],
+          },
+        },
+        {
+          title: 'Your Origin Story',
+          content: [
+            'Your origin story is what makes you credible and relatable. It shows you\'ve been where your audience is now.',
+            'This isn\'t about bragging - it\'s about showing the transformation journey that proves you can help them.',
+            'The best origin stories follow this pattern: Struggle → Discovery → Transformation → Result',
+          ],
+          exercise: {
+            id: 'origin-story',
+            prompt: 'Share your journey from struggle to success.',
+            fields: [
+              {
+                id: 'origin-struggle',
+                label: 'What were you struggling with before you learned what you know now?',
+                type: 'textarea',
+                placeholder: 'Example: I was working 60-hour weeks, constantly overwhelmed, and burning out trying to do everything manually...',
+              },
+              {
+                id: 'origin-transformation',
+                label: 'What changed everything for you?',
+                type: 'textarea',
+                placeholder: 'Example: I discovered AI automation tools and learned how to systematize my workflow...',
+              },
+              {
+                id: 'origin-result',
+                label: 'What result did you achieve that others want?',
+                type: 'textarea',
+                placeholder: 'Example: Now I work 30 hours a week, doubled my output, and have time for my family...',
+              },
+            ],
+          },
+        },
+        {
           title: 'Choosing Your Tools/Methods',
           content: [
             'What tools, systems, or approaches are you genuinely excited about? Authenticity matters more than trends.',
@@ -125,6 +193,33 @@ export default function DefineYourNichePage() {
             prompt: 'Write your final niche statement here. This is what will guide your entire blog strategy!',
             placeholder: 'I help [audience] use [tools] to [outcome]',
             multiline: false,
+          },
+        },
+        {
+          title: 'Niche Alignment Check',
+          content: [
+            'Before you move forward, let\'s make sure everything feels right. Review what you\'ve built:',
+            '**Your Audience:** The specific people you help',
+            '**Their Sticky Problem:** The burning issue that keeps them up at night',
+            '**Your Origin Story:** How you transformed from where they are to where they want to be',
+            '**Your Tools/Methods:** The specific approaches you teach',
+            '**Your Promised Outcome:** The tangible result you help them achieve',
+            'When all these pieces align, your niche becomes magnetic. Your ideal readers will immediately know: "This blog is for ME."',
+          ],
+          exercise: {
+            id: 'niche-alignment',
+            prompt: 'Look at everything you\'ve defined above. Does this niche feel exciting and aligned for you?',
+            fields: [
+              {
+                id: 'niche-alignment-check',
+                label: 'Does this niche feel exciting and aligned?',
+                type: 'radio',
+                options: [
+                  'Yes - I\'m excited to move forward with this!',
+                  'Not quite - I need to revise something',
+                ],
+              },
+            ],
           },
         },
       ]}

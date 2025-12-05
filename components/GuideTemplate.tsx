@@ -12,6 +12,8 @@ interface GuideExerciseField {
   placeholder?: string;
   multiline?: boolean;
   optional?: boolean;
+  type?: 'text' | 'textarea' | 'select' | 'radio';
+  options?: string[]; // For select/radio types
 }
 
 interface GuideExercise {
@@ -275,7 +277,36 @@ export default function GuideTemplate({
                               {fieldIndex + 1}. (optional)
                             </label>
                           )}
-                          {field.multiline ? (
+
+                          {/* Render different input types */}
+                          {field.type === 'select' && field.options ? (
+                            <select
+                              value={exerciseResponses[field.id] || ''}
+                              onChange={(e) => handleExerciseChange(field.id, e.target.value)}
+                              className="w-full px-4 py-3 bg-slate-900/50 border border-white/10 rounded-lg text-slate-200 focus:outline-none focus:border-blue-500/50 focus:ring-2 focus:ring-blue-500/20"
+                            >
+                              <option value="">{field.placeholder || 'Select an option...'}</option>
+                              {field.options.map((option, optIndex) => (
+                                <option key={optIndex} value={option}>{option}</option>
+                              ))}
+                            </select>
+                          ) : field.type === 'radio' && field.options ? (
+                            <div className="space-y-2">
+                              {field.options.map((option, optIndex) => (
+                                <label key={optIndex} className="flex items-center gap-3 p-3 bg-slate-900/30 border border-white/5 rounded-lg hover:bg-slate-900/50 cursor-pointer transition-colors">
+                                  <input
+                                    type="radio"
+                                    name={field.id}
+                                    value={option}
+                                    checked={exerciseResponses[field.id] === option}
+                                    onChange={(e) => handleExerciseChange(field.id, e.target.value)}
+                                    className="w-4 h-4 text-blue-600 border-slate-600 focus:ring-blue-500 focus:ring-offset-slate-900"
+                                  />
+                                  <span className="text-slate-300">{option}</span>
+                                </label>
+                              ))}
+                            </div>
+                          ) : field.type === 'textarea' || field.multiline ? (
                             <textarea
                               value={exerciseResponses[field.id] || ''}
                               onChange={(e) => handleExerciseChange(field.id, e.target.value)}
