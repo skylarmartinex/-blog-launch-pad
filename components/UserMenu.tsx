@@ -62,6 +62,13 @@ export default function UserMenu({ onShowAuth }: UserMenuProps) {
             </div>
 
             <div className="p-2">
+              <a
+                href="/profile"
+                className="w-full px-4 py-2.5 text-left text-sm text-slate-300 hover:bg-white/5 rounded-lg transition-all flex items-center gap-2 mb-1"
+              >
+                <span className="text-xl">⚙️</span>
+                Profile & Settings
+              </a>
               <button
                 onClick={handleSignOut}
                 className="w-full px-4 py-2.5 text-left text-sm text-red-400 hover:bg-red-500/10 rounded-lg transition-all flex items-center gap-2"

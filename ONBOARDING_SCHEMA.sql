@@ -3,16 +3,28 @@ CREATE TABLE IF NOT EXISTS user_onboarding (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE NOT NULL UNIQUE,
 
-  -- Sticky Problem fields
+  -- Step 1: Audience
+  audience TEXT,
+
+  -- Step 2: Sticky Problem fields
   sticky_problem_choice TEXT,
   sticky_problem_description TEXT,
 
-  -- Origin Story fields
+  -- Step 3: Tools & Methods
+  tools TEXT,
+
+  -- Step 4: Outcome
+  outcome TEXT,
+
+  -- Step 5: Origin Story fields
   origin_struggle TEXT,
   origin_transformation TEXT,
   origin_result TEXT,
 
-  -- Niche Alignment
+  -- Step 6: Final Generated Statement
+  final_niche_statement TEXT,
+
+  -- Step 7: Niche Alignment
   niche_alignment TEXT,
 
   -- Timestamps

@@ -125,3 +125,61 @@ export async function resetUserProgress(userId: string | undefined) {
     console.error('Error resetting progress:', err);
   }
 }
+
+// Onboarding Data Types & Functions
+
+export interface OnboardingData {
+  audience?: string;
+  sticky_problem_choice?: string;
+  sticky_problem_description?: string;
+  tools?: string;
+  outcome?: string;
+  origin_struggle?: string;
+  origin_transformation?: string;
+  origin_result?: string;
+  final_niche_statement?: string;
+  niche_alignment?: string;
+}
+
+export async function getOnboardingData(userId: string | undefined) {
+  if (!userId) return null;
+
+  try {
+    const { data, error } = await supabase
+      .from('user_onboarding')
+      .select('*')
+      .eq('user_id', userId)
+      .single();
+
+    if (error) {
+      if (error.code === 'PGRST116') return null; // No data found
+      throw error;
+    }
+
+    return data as OnboardingData;
+  } catch (err) {
+    console.error('Error fetching onboarding data:', err);
+    return null;
+  }
+}
+
+export async function updateOnboardingData(userId: string | undefined, data: OnboardingData) {
+  if (!userId) return;
+
+  try {
+    // Check if record exists first to decide between insert/update or upsert
+    // Upsert is cleaner if we have a unique constraint on user_id (which we do)
+    const { error } = await supabase
+      .from('user_onboarding')
+      .upsert({
+        user_id: userId,
+        ...data,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' });
+
+    if (error) throw error;
+  } catch (err) {
+    console.error('Error updating onboarding data:', err);
+    throw err;
+  }
+}

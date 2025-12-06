@@ -15,6 +15,7 @@ import { tasksData, roadmapData, ideasData, backlogData, sopsData } from '@/lib/
 import { loadUserNotes, saveUserNote, resetUserProgress, NoteData } from '@/lib/supabase';
 import { useAuth } from '@/lib/auth-context';
 import type { Task } from '@/lib/data';
+import OnboardingStatusCheck from '@/components/OnboardingStatusCheck';
 
 export default function Home() {
   const { user, loading: authLoading } = useAuth();
@@ -130,6 +131,13 @@ export default function Home() {
   return (
     <div className="max-w-5xl mx-auto">
       <Header onShowAuth={() => setIsAuthModalOpen(true)} />
+
+      {/* Onboarding Check */}
+      {user && (
+        <div className="mb-8">
+          <OnboardingStatusCheck userId={user.id} />
+        </div>
+      )}
 
       {!user && (
         <div className="mb-6 p-4 bg-blue-500/10 border border-blue-500/30 rounded-xl text-center">
